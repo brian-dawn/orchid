@@ -51,14 +51,12 @@
   (when (nil? @running-server)
     (start-jetty routes port)))
 
-(defmacro defapi
+(defmacro def-orchid
   "Define a Ring handler function from a sequence of routes. The name may
   optionally be followed by a doc-string and metadata map."
   [& routes]
   (let [[name routes] (macro/name-with-attributes 'orchid-api-routes routes)]
     `(def ~name (routes ~@routes))))
 
-
-(defmacro run [port]
-  `(start-server ~'(var orchid-api-routes) ~port)
-  )
+(defmacro grow [port]
+  `(start-server ~'(var orchid-api-routes) ~port))

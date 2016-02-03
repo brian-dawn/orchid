@@ -1,10 +1,10 @@
 (ns orchid.orchid-test
-  (:require [orchid.core :refer [defapi GET json-response run]]))
+  (:require [orchid.core :refer [def-orchid GET json-response grow]]))
 
 
-(defapi
+(def-orchid
    (GET "/" [] "hi theres! wee")
    (GET "/json" [] (json-response {:foo [:bar :baz]})))
 
 (defn -main []
-  (run 8080))
+  (grow 8080))
