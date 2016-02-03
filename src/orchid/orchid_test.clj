@@ -1,15 +1,10 @@
 (ns orchid.orchid-test
-  (:require [orchid.core :refer [defapi GET]]))
+  (:require [orchid.core :refer [defapi GET json-response run]]))
 
 
 (defapi
-  (GET "/" [] "hi there!"))
+   (GET "/" [] "hi theres! wee")
+   (GET "/json" [] (json-response {:foo [:bar :baz]})))
 
-
-;; TODO
-;; (defapi
-;;   (MIDDLEWARE (fn [] dostuff))
-;;   (GET "/" [] "hi there!"))
-
-
-
+(defn -main []
+  (run 8080))

@@ -51,13 +51,14 @@
   (when (nil? @running-server)
     (start-jetty routes port)))
 
-
-;; does it not like where we are doing the def? Is it because of namespaces?
 (defmacro defapi
   "Define a Ring handler function from a sequence of routes. The name may
   optionally be followed by a doc-string and metadata map."
   [& routes]
   (let [[name routes] (macro/name-with-attributes 'orchid-api-routes routes)]
-    `(do
-      (intern 'orchid.core '~'orchid-api-routes (routes ~@routes))
-      (start-server #'orchid-api-routes 8080))))
+    `(def ~name (routes ~@routes))))
+
+
+(defmacro run [port]
+  `(start-server ~'(var orchid-api-routes) ~port)
+  )
