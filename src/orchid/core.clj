@@ -12,12 +12,14 @@
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.defaults :refer [api-defaults wrap-defaults]]
             [ring.middleware.json :refer [wrap-json-body]]
+            [clojure.tools.macro :as macro]
    )
   )
 
 
 (potemkin/import-vars [compojure.core
                        defroutes
+                       routes
                        GET
                        PUT
                        POST
@@ -38,11 +40,24 @@
                                       )))
 
 
-(defonce running-servers (atom {}))
 
-(defn start-server [app port]
-  (when-let [old-server (get @running-servers port)]
-    (when (.isRunning old-server)
-      (.stop old-server)))
-  (swap! running-servers merge {port (run-jetty app {:port port :join? false})}))
+(defonce running-server (atom nil))
 
+(defn start-jetty [routes port]
+  (println "Starting jetty")
+  (reset! running-server (run-jetty (middleware-dev routes) {:port port :join? false})))
+
+(defn start-server [routes port]
+  (when (nil? @running-server)
+    (start-jetty routes port)))
+
+
+;; does it not like where we are doing the def? Is it because of namespaces?
+(defmacro defapi
+  "Define a Ring handler function from a sequence of routes. The name may
+  optionally be followed by a doc-string and metadata map."
+  [& routes]
+  (let [[name routes] (macro/name-with-attributes 'orchid-api-routes routes)]
+    `(do
+      (intern 'orchid.core '~'orchid-api-routes (routes ~@routes))
+      (start-server #'orchid-api-routes 8080))))
