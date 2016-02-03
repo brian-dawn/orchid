@@ -13,9 +13,17 @@
             [ring.middleware.defaults :refer [api-defaults wrap-defaults]]
             [ring.middleware.json :refer [wrap-json-body]]
             [clojure.tools.macro :as macro]
+
+            [taoensso.timbre :as timbre]
    )
   )
 
+(potemkin/import-vars [taoensso.timbre
+                       info
+                       warn
+                       debug
+                       error
+                       color-str])
 
 (potemkin/import-vars [compojure.core
                        defroutes
@@ -44,8 +52,9 @@
 (defonce running-server (atom nil))
 
 (defn start-jetty [routes port]
-  (println "Starting jetty")
-  (reset! running-server (run-jetty (middleware-dev routes) {:port port :join? false})))
+  (timbre/info (timbre/color-str :yellow "applying sunlight"))
+  (reset! running-server
+          (run-jetty (middleware-dev routes) {:port port :join? false})))
 
 (defn start-server [routes port]
   (when (nil? @running-server)

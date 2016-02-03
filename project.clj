@@ -3,6 +3,7 @@
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :main orchid.orchid-test
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [ring "1.4.0"]
                  [ring-server "0.4.0"]
@@ -16,4 +17,5 @@
                  [cheshire "5.5.0"]
 
                  [potemkin "0.4.1"]
+                 [com.taoensso/timbre "4.2.1"]
                  ])

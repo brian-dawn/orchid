@@ -3,7 +3,7 @@
 
 
 (def-orchid
-   (GET "/" [] "hi theres! wee")
+   (GET "/" [] "hi")
    (GET "/json" [] (json-response {:foo [:bar :baz]})))
 
 (defn -main []
