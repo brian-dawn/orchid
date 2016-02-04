@@ -1,12 +1,11 @@
 (ns orchid.core
   (:require [potemkin.namespaces :as potemkin]
             [environ.core :refer [env]]
-            [ring.adapter.jetty :refer [run-jetty]]
             [compojure.core]
             [compojure.route :refer [not-found resources]]
             [hiccup.core :refer [html]]
             [hiccup.page :refer [include-js include-css]]
-            [cheshire.core :refer :all]
+            [cheshire.core :as json]
             [prone.middleware :refer [wrap-exceptions]]
             [ring.util.json-response]
             [ring.middleware.reload :refer [wrap-reload]]
@@ -15,8 +14,7 @@
             [clojure.tools.macro :as macro]
 
             [taoensso.timbre :as timbre]
-   )
-  )
+            [aleph.http :as aleph]))
 
 (potemkin/import-vars [taoensso.timbre
                        info
@@ -36,9 +34,20 @@
 (potemkin/import-vars [ring.util.json-response
                        json-response])
 
+
+;; TODO test that we can have varying case on application/json and content-type.
+(defn json-body-middleware [app]
+  (fn [request]
+    (if (and
+         (not (nil? (:body request)))
+         (= ((:headers request) "content-type") "application/json"))
+      (app (update-in request [:body] #(json/parse-string (slurp %) true)))
+      (app request))))
+
+
 (def middleware (fn [handler] (-> handler
                                   (wrap-defaults api-defaults)
-                                  wrap-json-body
+                                  json-body-middleware
                                   )))
 
 (def middleware-dev (fn [handler] (-> handler
@@ -50,22 +59,13 @@
 
 
 (defonce running-server (atom nil))
-
-(defn start-jetty [routes port]
-  (timbre/info (timbre/color-str :yellow "applying sunlight"))
-  (reset! running-server
-          (run-jetty (middleware-dev routes) {:port port :join? false})))
+(defonce routes (atom nil))
 
 (defn start-server [routes port]
   (when (nil? @running-server)
-    (start-jetty routes port)))
+    (do
+      (timbre/info (timbre/color-str :yellow "the sun shines upon you 🌱  🌺")) ;; TODO need to make message have higher corn content if possible.
+      (reset! running-server (aleph/start-server (middleware-dev routes) {:port port})))))
 
-(defmacro def-orchid
-  "Define a Ring handler function from a sequence of routes. The name may
-  optionally be followed by a doc-string and metadata map."
-  [& routes]
-  (let [[name routes] (macro/name-with-attributes 'orchid-api-routes routes)]
-    `(def ~name (routes ~@routes))))
-
-(defmacro grow [port]
-  `(start-server ~'(var orchid-api-routes) ~port))
+(defmacro grow [app port]
+  `(start-server (var ~app) ~port))
