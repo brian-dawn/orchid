@@ -2,9 +2,7 @@
 
 A Clojure library to provide sane REST defaults for a compojure project.
 
-```
-[orchid "0.1.0-SNAPSHOT"]
-```
+[![Clojars Project](https://img.shields.io/clojars/v/orchid.svg)](https://clojars.org/orchid)
 
 ## Rationale
 
