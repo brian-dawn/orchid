@@ -3,7 +3,7 @@
 A Clojure library to provide sane REST defaults for a compojure project.
 
 ```
-[org.clojars.brian-dawn/orchid "0.1.0-SNAPSHOT"]
+[orchid "0.1.0-SNAPSHOT"]
 ```
 
 ## Rationale

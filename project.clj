@@ -1,4 +1,4 @@
-(defproject org.clojars.brian-dawn/orchid "0.1.0-SNAPSHOT"
+(defproject orchid "0.1.0-SNAPSHOT"
   :description "A Clojure library to provide sane REST defaults for a compojure project."
   :url "https://github.com/brian-dawn/orchid"
   :license {:name "Eclipse Public License"
