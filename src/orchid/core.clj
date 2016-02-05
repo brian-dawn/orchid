@@ -2,7 +2,7 @@
   (:require [potemkin.namespaces :as potemkin]
             [environ.core :refer [env]]
             [compojure.core]
-            [compojure.route :refer [not-found resources]]
+            [compojure.route]
             [hiccup.core :refer [html]]
             [hiccup.page :refer [include-js include-css]]
             [cheshire.core :as json]
@@ -31,6 +31,9 @@
                        POST
                        DELETE])
 
+(potemkin/import-vars [compojure.route
+                       not-found])
+
 (potemkin/import-vars [ring.util.json-response
                        json-response])
 
@@ -45,6 +48,41 @@
       (app (update-in request [:body] #(json/parse-string (slurp %) true)))
       (app request))))
 
+(defn colorize-request-method [method]
+  (let [color (case method
+                :get :green
+                :put :yellow
+                :delete :red
+                :post :blue
+                :white)]
+    (timbre/color-str color (name method)))
+  )
+
+(defn colorize-status [status]
+  (timbre/color-str :purple (str status))
+  )
+
+(defn logging-request-middleware [app]
+  (fn [request]
+    (timbre/info ">"
+                 (colorize-request-method (:request-method request))
+                 (:uri request)
+                 (str "params=" (:params request))
+                 (str "body=" (:body request)))
+    (app request)
+    )
+  )
+
+(defn logging-response-middleware [app]
+  (fn [request]
+    (let [response (app request)]
+      (timbre/info "<"
+                   (colorize-status (:status response))
+                   (str "body=" (:body response)))
+      response
+      )
+    )
+  )
 
 (def middleware (fn [handler] (-> handler
                                   (wrap-defaults api-defaults)
@@ -52,9 +90,11 @@
                                   )))
 
 (def middleware-dev (fn [handler] (-> handler
+                                      logging-request-middleware
                                       wrap-exceptions
                                       wrap-reload
                                       middleware
+                                      logging-response-middleware
                                       )))
 
 
@@ -65,7 +105,7 @@
 (defn start-server [routes port]
   (when (nil? @running-server)
     (do
-      (timbre/info (timbre/color-str :yellow "the sun shines upon you 🌱  🌺")) ;; TODO need to make message have higher corn content if possible.
+      (timbre/info (timbre/color-str :green "orchid is ready 🌺")) ;; TODO need to make message have higher corn content if possible.
       (reset! running-server (aleph/start-server (middleware-dev routes) {:port port})))))
 
 (defmacro grow [app port]

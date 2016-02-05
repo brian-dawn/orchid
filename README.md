@@ -17,10 +17,11 @@ Orchid aims to just be a simple batteries included Compojure library and nothing
 
 ```clojure
 (ns orchid.sample-app
-  (:require [orchid.core :refer [GET grow defroutes]]))
+  (:require [orchid.core :refer [GET grow defroutes not-found]]))
 
 (defroutes app
-  (GET "/" [] "hello world!"))
+  (GET "/" [] "hello world!")
+  (not-found "not found")
 
 (defn -main []
   (grow app 8080))
@@ -45,7 +46,7 @@ checking out the Compojure documentation on routes: https://github.com/weavejest
 
 As well as the article on destructuring: https://github.com/weavejester/compojure/wiki/Destructuring-Syntax
 
-I included some sample requests using the httpie: http://httpie.org
+I included some sample requests using httpie: http://httpie.org
 
 ### JSON Response
 

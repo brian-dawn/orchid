@@ -1,5 +1,10 @@
 (ns orchid.sample-app
-  (:require [orchid.core :refer [GET POST json-response grow info defroutes]]))
+  (:require [orchid.core :refer [GET POST json-response grow info defroutes not-found]]))
+
+;; TODO status codes
+;; websockets?!?!?
+;; prone documentation, debug looks cool I didn't know it could do that!
+
 
 (defroutes app
   (GET "/" [] (json-response {:message "hello world!"}))
@@ -32,7 +37,7 @@
   (GET "/hello/:name" [name] (str "hi " name))
 
   (POST "/hello" {body :body} (str "hi " (:name body)))
-
+  (not-found "not found")
   )
 
 (defn -main []
