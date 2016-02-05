@@ -2,6 +2,10 @@
 
 A Clojure library to provide sane REST defaults for a compojure project.
 
+```
+[org.clojars.brian-dawn/orchid "0.1.0-SNAPSHOT"]
+```
+
 ## Rationale
 
 I felt that using setting up a Compojure application can be difficult for people
