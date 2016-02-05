@@ -11,12 +11,38 @@ getting prone to aid with debugging will quickly test peoples patience.
 
 Orchid aims to just be a simple batteries included Compojure library and nothing more.
 
+## Minimum Application
+
+```clojure
+(ns orchid.sample-app
+  (:require [orchid.core :refer [GET grow defroutes]]))
+
+(defroutes app
+  (GET "/" [] "hello world!"))
+
+(defn -main []
+  (grow app 8080))
+```
+
+To immediately start working with an application you can start the server with
+
+`lein run`
+
+We will automatically reload code that changes, so no need to restart the server periodically.
+If you prefer working from a REPL or using Cider just execute `grow` from the REPL.
+
 ## Routes
 
 Routes are handled just like they are in Compojure. Orchid provides middleware
 that handles the automatic conversion of JSON to Clojure data-structures.
 
 ### Examples
+
+### JSON Response
+
+```clojure
+(GET "/json" [] (json-response {:message "hello world!"}))
+```
 
 ### Query Parameters
 

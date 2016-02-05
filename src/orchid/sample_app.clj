@@ -1,10 +1,8 @@
 (ns orchid.sample-app
-  (:require [orchid.core :refer [GET POST json-response grow info defroutes]]
-            [cheshire.core :as json]
-            [manifold.stream :as stream]))
+  (:require [orchid.core :refer [GET POST json-response grow info defroutes]]))
 
 (defroutes app
-  (GET "/" [] "hi")
+  (GET "/" [] (json-response {:message "hello world!"}))
 
   (GET "/logme" [] (do (info "logging stuff!") "we logged some things"))
 
