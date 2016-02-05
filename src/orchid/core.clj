@@ -34,6 +34,7 @@
 (potemkin/import-vars [ring.util.json-response
                        json-response])
 
+;; TODO dev request logger?
 
 ;; TODO test that we can have varying case on application/json and content-type.
 (defn json-body-middleware [app]

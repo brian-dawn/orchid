@@ -38,22 +38,32 @@ that handles the automatic conversion of JSON to Clojure data-structures.
 
 ### Examples
 
+I've included some examples of common routing. For more information on Compojure routes I recommend
+checking out the Compojure documentation on routes: https://github.com/weavejester/compojure/wiki/Routes-In-Detail
+
+As well as the article on destructuring: https://github.com/weavejester/compojure/wiki/Destructuring-Syntax
+
+I included some sample requests using the httpie: http://httpie.org
+
 ### JSON Response
 
 ```clojure
 (GET "/json" [] (json-response {:message "hello world!"}))
+;; http get localhost:8080
 ```
 
 ### Query Parameters
 
 ```clojure
 (GET "/hello" [name] (str "hi " name))
+;; http get localhost:8080/hello?name=Brian
 ```
 
 ### URL Parameters
 
 ```clojure
 (GET "/hello/:name" [name] (str "hi " name))
+;; http get localhost:8080/hello/Brian
 ```
 
 ### JSON Body
@@ -61,11 +71,13 @@ that handles the automatic conversion of JSON to Clojure data-structures.
 We can access the body like this:
 ```clojure
 (POST "/hello" {body :body} (str "hi " (:name body)))
+;; echo '{"name": "Brian"}' | http post localhost:8080/hello --json
 ```
 
 Or we can use destructuring to pull out specific keys we want.
 ```clojure
 (POST "/hello" {{:keys [name]} :body} (str "hi " name))
+;; echo '{"name": "Brian"}' | http post localhost:8080/hello --json
 ```
 
 ## License

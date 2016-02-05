@@ -29,6 +29,10 @@
   (POST "/jsonbody2" {{:keys [name]} :body} (str "hi " name))
   ;; TODO documentation along with a cURL for how to trigger each.
 
+  (GET "/hello/:name" [name] (str "hi " name))
+
+  (POST "/hello" {body :body} (str "hi " (:name body)))
+
   )
 
 (defn -main []
