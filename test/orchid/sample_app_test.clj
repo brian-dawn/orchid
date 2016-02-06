@@ -39,6 +39,7 @@
 
     (let [response (mockrequest app :get "/")]
       (is (ok? response))
+      (is (not (json? response)))
       (is (= "hello world!" (:body response)))))
 
   (testing "url params"
