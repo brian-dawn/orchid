@@ -3,6 +3,7 @@
 A Clojure library to provide sane REST defaults for a compojure project.
 
 [![Clojars Project](http://clojars.org/orchid/latest-version.svg)](https://clojars.org/orchid)
+[![Build Status](https://travis-ci.org/brian-dawn/orchid.svg?branch=master)](https://travis-ci.org/brian-dawn/orchid)
 [![Dependencies Status](https://jarkeeper.com/brian-dawn/orchid/status.svg)](https://jarkeeper.com/brian-dawn/orchid)
 
 ## Rationale
