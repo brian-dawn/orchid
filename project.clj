@@ -1,7 +1,7 @@
 (defproject orchid "0.1.0-SNAPSHOT"
   :description "A Clojure library to provide sane REST defaults for a compojure project."
   :url "https://github.com/brian-dawn/orchid"
-  :main orchid.sample-app
+;  :main orchid.sample-app
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :plugins [[lein-ancient "0.6.8"]]

@@ -12,9 +12,6 @@
             [taoensso.timbre :as timbre]
             [aleph.http :as aleph]))
 
-(potemkin/import-vars [prone.debug
-                       debug])
-
 (potemkin/import-vars [taoensso.timbre
                        info
                        warn

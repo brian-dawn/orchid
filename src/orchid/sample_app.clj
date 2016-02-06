@@ -1,5 +1,7 @@
 (ns orchid.sample-app
-  (:require [orchid.core :refer [GET POST json-response grow info defroutes not-found debug]]))
+  (:require
+
+            [orchid.core :refer [GET POST json-response grow info defroutes not-found debug]]))
 
 ;; TODO status codes
 ;; websockets?!?!?
@@ -14,6 +16,8 @@
   ;; Will behave differently between dev/non dev.
   (GET "/exception" [] (throw (new Exception "EXCEPTION!!!!")))
 
+
+
   ;; JSON response.
   (GET "/json" [] (json-response {:foo [:bar :baz]}))
   
@@ -21,7 +25,6 @@
   (GET "/hello/:name" [name] (debug))
 
   (GET "/sleep" [] (Thread/sleep 100000000000))
-
   ;; TODO test returning a manifold deferred
   ;; as indicated https://github.com/ztellman/aleph
   ;; also performance testing with jetty would be sweet!!!
