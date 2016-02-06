@@ -16,6 +16,9 @@
             [taoensso.timbre :as timbre]
             [aleph.http :as aleph]))
 
+(potemkin/import-vars [prone.debug
+                       debug])
+
 (potemkin/import-vars [taoensso.timbre
                        info
                        warn
@@ -78,7 +81,8 @@
     (let [response (app request)]
       (timbre/info "<"
                    (colorize-status (:status response))
-                   (str "body=" (:body response)))
+                   ;;(str "body=" (:body response))
+                   )
       response
       )
     )
@@ -96,7 +100,6 @@
                                       middleware
                                       logging-response-middleware
                                       )))
-
 
 
 (defonce running-server (atom nil))

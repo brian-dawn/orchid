@@ -1,5 +1,5 @@
 (ns orchid.sample-app
-  (:require [orchid.core :refer [GET POST json-response grow info defroutes not-found]]))
+  (:require [orchid.core :refer [GET POST json-response grow info defroutes not-found debug]]))
 
 ;; TODO status codes
 ;; websockets?!?!?
@@ -18,7 +18,7 @@
   (GET "/json" [] (json-response {:foo [:bar :baz]}))
   
   ;; URL parameters.
-  (GET "/hello/:name" [name] (str "hi " name))
+  (GET "/hello/:name" [name] (debug))
 
   (GET "/sleep" [] (Thread/sleep 100000000000))
 
@@ -34,10 +34,10 @@
   (POST "/jsonbody2" {{:keys [name]} :body} (str "hi " name))
   ;; TODO documentation along with a cURL for how to trigger each.
 
-  (GET "/hello/:name" [name] (str "hi " name))
+  (GET "/heya" [] (let [x 3] (debug)))
 
   (POST "/hello" {body :body} (str "hi " (:name body)))
-  (not-found "not found")
+;  (not-found "not found")
   )
 
 (defn -main []
