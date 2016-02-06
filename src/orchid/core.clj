@@ -1,10 +1,7 @@
 (ns orchid.core
   (:require [potemkin.namespaces :as potemkin]
-            [environ.core :refer [env]]
             [compojure.core]
             [compojure.route]
-            [hiccup.core :refer [html]]
-            [hiccup.page :refer [include-js include-css]]
             [cheshire.core :as json]
             [prone.middleware :refer [wrap-exceptions]]
             [ring.util.json-response]

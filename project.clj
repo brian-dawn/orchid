@@ -13,8 +13,6 @@
                  [ring/ring-json "0.4.0"]
                  [compojure "1.4.0"]
                  [prone "1.0.2"]
-                 [hiccup "1.0.5"]
-                 [environ "1.0.2"]
                  [cheshire "5.5.0"]
                  [aleph "0.4.1-beta2"]
 
