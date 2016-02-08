@@ -1,7 +1,5 @@
 (ns orchid.sample-app
-  (:require
-
-            [orchid.core :refer [GET POST json-response grow info defroutes not-found debug]]))
+  (:require [orchid.core :refer [GET POST json-response grow info defroutes not-found debug]]))
 
 ;; TODO status codes
 ;; websockets?!?!?
