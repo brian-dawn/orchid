@@ -16,8 +16,8 @@
 
 (defn colorize-status [status]
   (let [color (cond
-                (<= 200 status 299) :blue
-                (<= 300 status 399) :purple
+                (<= 200 status 299) :purple
+                (<= 300 status 399) :blue
                 (<= 400 status 499) :yellow
                 (<= 500 status)     :red
                 :else               :white)]
@@ -53,12 +53,14 @@
       response)))
 
 (defn exception-middleware
-  [app]
+  [app config]
   (fn [request]
     (try
       (app request)
       (catch Exception e
         (timbre/error e "exception bubbled up too far")
-        {:status 500
-         :body (str (type e) " " (.getMessage e))} ;; TODO we should only return this in dev mode.
-        ))))
+        (if (:dev config)
+          {:status 500
+           :body (str (type e) " " (.getMessage e))}
+          {:status 500
+           :body "Oops! Something went terribly wrong!"})))))

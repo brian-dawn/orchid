@@ -10,6 +10,7 @@
 (defroutes app
 
   (GET "/" [] "hello world!")
+  (GET "/exception" [] (new Exception "Test Exception"))
   (GET "/queryparams" [param] (json-response param))
   (GET "/urlparams/:param" [param] (json-response param))
   (POST "/postbody" {body :body} (json-response body)))
@@ -23,13 +24,14 @@
   (= (get-in response [:headers "Content-Type"]) "application/json"))
 
 (defn mockrequest [app method route]
-  (let [response ((middleware-dev app) (request method route))]
+  (let [response (((middleware {:dev true}) app) (request method route))]
     (if (json? response)
       (update-in response [:body] json/parse-string)
       response)))
+
 ;; TODO cleanup or merge these methods.
 (defn mockrequest-json-body [app method route json-body]
-  ((middleware-dev app) (-> (request method route)
+  (((middleware {:dev true}) app) (-> (request method route)
                             (body (json/generate-string json-body))
                             (content-type "application/json"))))
 
@@ -58,8 +60,14 @@
     (let [response (mockrequest app :get "/queryparams?param=foo&param=bar")]
       (is (ok? response))
       (is (json? response))
-      (is (= ["foo" "bar"] (:body response))))) ;; todo in mock request check content-type if JSON then update-in with parse-string
+      (is (= ["foo" "bar"] (:body response)))))
 
+  (testing "exception handling"
+    (let [response (mockrequest app :get "/exception")]
+      (is (= 500 (:status response)))
+      ;; TODO check body
+      ))
+  
   (testing "post body"
     (let [response (mockrequest-json-body app :post "/postbody" {:foo "bar"})]
       (is (ok? response))

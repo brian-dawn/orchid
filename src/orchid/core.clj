@@ -35,19 +35,19 @@
 (potemkin/import-vars [ring.util.json-response
                        json-response])
 
-(def middleware (fn [handler] (-> handler
-                                  (wrap-defaults api-defaults)
-                                  middleware/json-body-middleware
-                                  )))
-
-(def middleware-dev (fn [handler] (-> handler
-                                      middleware/logging-request-middleware
-                                      wrap-reload
-                                      middleware
-                                      middleware/exception-middleware ;; TODO this should go in non dev middleware. We still want to 500 response on an exception we just don't want to display the exception.
-                                      middleware/logging-response-middleware
-                                      )))
-
+(defn middleware [config]
+  (let [base-middleware (fn [handler]
+                          (-> handler
+                              (wrap-defaults api-defaults)
+                              middleware/json-body-middleware
+                              (middleware/exception-middleware config)))]
+    (if (:dev config)
+      (fn [handler] (-> handler
+                        middleware/logging-request-middleware
+                        wrap-reload
+                        base-middleware
+                        middleware/logging-response-middleware))
+      base-middleware)))
 
 (defonce running-server (atom nil))
 
@@ -68,5 +68,8 @@
 
 (defmacro grow
   "Convenience macro for starting a server with the routes passed as a var."
-  [app port]
-  `(start-server (middleware-dev (var ~app)) ~port))
+  ([app port]
+   `(start-server ((middleware {:dev true}) (var ~app)) ~port))
+  ([app port config]
+   `(start-server ((middleware config) (var ~app)) ~port)
+   ))
