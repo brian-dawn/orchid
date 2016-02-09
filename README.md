@@ -13,9 +13,8 @@ I often want to write quick JSON rest APIs. Doing this with plain Compojure can 
 there are a couple dependencies that need to be added to get everything wired together (at least the way I like it)
 and I often found myself writing very similar code multiple times.
 
-Orchid aims to just be a simple batteries included Compojure library and nothing more. The only goal of Orchid is to
-reduce cognitive resource costs for throwing together simple REST apis. Orchid may not work for everyone, but it is
-very easy to go to a traditional Compojure application from an Orchid one.
+Orchid aims to just be a simple batteries included Compojure library and nothing more. Orchid may not work for everyone,
+but it is very easy to go to a traditional Compojure application from an Orchid one.
 
 ## Minimum Application
 
