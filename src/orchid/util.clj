@@ -15,8 +15,9 @@
   "Checks the content-type in the header of the request and determines if json."
   [request]
   (let [modified-headers (update-keys-with-fn (:headers request) clojure.string/lower-case)]
-    (= (clojure.string/lower-case (modified-headers "content-type"))
-       "application/json")))
+    (and (contains? modified-headers "content-type")
+         (= (clojure.string/lower-case (modified-headers "content-type"))
+            "application/json"))))
 
 
 
