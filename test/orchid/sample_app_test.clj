@@ -9,7 +9,7 @@
 (defroutes app
 
   (GET "/" [] "hello world!")
-  (GET "/exception" [] (new Exception "Test Exception"))
+  (GET "/exception" [] (throw (new Exception "TestException")))
   (GET "/queryparams" [param] (json-response param))
   (GET "/urlparams/:param" [param] (json-response param))
   (POST "/postbody" {body :body} (json-response body)))
@@ -44,8 +44,7 @@
   (testing "exception handling"
     (let [response (mock-request app :get "/exception")]
       (is (= 500 (:status response)))
-      ;; TODO check body
-      ))
+      (is (.contains (:body response) "TestException"))))
   
   (testing "post body"
     (let [response (mock-request app :post "/postbody" {"foo" "bar"})]
