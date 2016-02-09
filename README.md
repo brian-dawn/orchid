@@ -41,7 +41,7 @@ To immediately start working with an application you can start the server with:
 
 `lein run`
 
-Orchid will automatically reload code changes, so no won't need to run `lein run` very often.
+Orchid will automatically reload code changes, so you won't need to run `lein run` very often.
 If you prefer working from a REPL or using Cider just execute `grow` from the REPL.
 
 ## Routes
