@@ -1,4 +1,4 @@
-(ns orchid.test
+(ns orchid.test-utils
   (:require [ring.mock.request :as ring]
             [orchid.core :as core]
             [cheshire.core :as json]))

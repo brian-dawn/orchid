@@ -1,6 +1,6 @@
 (ns orchid.sample-app-test
   (:require  [clojure.test :refer :all]
-             [orchid.test :refer :all]
+             [orchid.test-utils :refer :all]
              [orchid.core :refer :all]
              [cheshire.core :as json]
              ))
