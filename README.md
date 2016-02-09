@@ -1,6 +1,6 @@
 # orchid
 
-A Clojure library to provide sane REST defaults for a compojure project.
+A Clojure library to provide sane REST defaults for a Compojure project.
 
 [![Clojars Project](http://clojars.org/orchid/latest-version.svg)](https://clojars.org/orchid)
 
@@ -9,17 +9,24 @@ A Clojure library to provide sane REST defaults for a compojure project.
 
 ## Rationale
 
-I felt that using setting up a Compojure application can be difficult for people
-coming to Clojure from other ecosystems. Tracking down all the middleware to
-enable automatic JSON conversion, setting up auto-reloading/server start from the REPL,
-getting prone to aid with debugging will quickly test peoples patience.
+I often want to write quick JSON rest APIs. Doing this with plain Compojure can be a bit of a headache at first,
+there are a couple dependencies that need to be added to get everything wired together (at least the way I like it)
+and I often found myself writing very similar code multiple times.
 
-Orchid aims to just be a simple batteries included Compojure library and nothing more.
+Orchid aims to just be a simple batteries included Compojure library and nothing more. The only goal of Orchid is to
+reduce cognitive resource costs for throwing together simple REST apis. Orchid may not work for everyone, but it is
+very easy to go to a traditional Compojure application from an Orchid one.
 
 ## Minimum Application
 
+To get started from a blank slate:
+
+`lein new app myproject`
+
+Then just add orchid as a dependency in your project.clj file. Place the following inside your `core.clj` file.
+
 ```clojure
-(ns orchid.sample-app
+(ns myproject.core
   (:require [orchid.core :refer [GET grow defroutes not-found]]))
 
 (defroutes app
@@ -30,24 +37,22 @@ Orchid aims to just be a simple batteries included Compojure library and nothing
   (grow app 8080))
 ```
 
-To immediately start working with an application you can start the server with
+To immediately start working with an application you can start the server with:
 
 `lein run`
 
-We will automatically reload code that changes, so no need to restart the server periodically.
+Orchid will automatically reload code changes, so no won't need to run `lein run` very often.
 If you prefer working from a REPL or using Cider just execute `grow` from the REPL.
 
 ## Routes
 
-Routes are handled just like they are in Compojure. Orchid provides middleware
-that handles the automatic conversion of JSON to Clojure data-structures.
+Routes are handled just like they are in Compojure. If you want information about them I recommend the following
+links:
+
+https://github.com/weavejester/compojure/wiki/Routes-In-Detail
+https://github.com/weavejester/compojure/wiki/Destructuring-Syntax
 
 ### Examples
-
-I've included some examples of common routing. For more information on Compojure routes I recommend
-checking out the Compojure documentation on routes: https://github.com/weavejester/compojure/wiki/Routes-In-Detail
-
-As well as the article on destructuring: https://github.com/weavejester/compojure/wiki/Destructuring-Syntax
 
 I included some sample requests using httpie: http://httpie.org
 
