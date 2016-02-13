@@ -52,15 +52,14 @@
 (defonce running-server (atom nil))
 
 (defn stop-server []
-  (when (not (nil? @running-server))
-    (do
-      (timbre/info "stopping webserver")
-      (try
-        (.close ^java.io.Closeable @running-server)
-        (catch Exception e)))))
+  (when-not (nil? @running-server)
+    (timbre/info "stopping webserver")
+    (try
+      (.close ^java.io.Closeable @running-server)
+      (catch Exception e))))
 
 (defn start-server [routes port]
-  (when (not (nil? @running-server))
+  (when-not (nil? @running-server)
     (stop-server))
   (do
     (reset! running-server (aleph/start-server routes {:port port}))
@@ -71,5 +70,4 @@
   ([app port]
    `(start-server ((middleware {:dev true}) (var ~app)) ~port))
   ([app port config]
-   `(start-server ((middleware config) (var ~app)) ~port)
-   ))
+   `(start-server ((middleware ~config) (var ~app)) ~port)))
