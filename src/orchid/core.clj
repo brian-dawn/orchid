@@ -14,12 +14,7 @@
             [taoensso.timbre :as timbre]
             [aleph.http :as aleph]))
 
-(potemkin/import-vars [taoensso.timbre
-                       info
-                       warn
-                       debug
-                       error
-                       color-str])
+
 
 (potemkin/import-vars [compojure.core
                        defroutes
