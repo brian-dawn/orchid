@@ -7,17 +7,17 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :plugins [[lein-ancient "0.6.10"]]
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [ring "1.4.0"]
+                 [ring "1.5.0"]
                  [ring-server "0.4.0"]
-                 [ring/ring-defaults "0.2.0"]
+                 [ring/ring-defaults "0.2.1"]
                  [ring-json-response "0.2.0"]
                  [ring/ring-json "0.4.0"]
-                 [compojure "1.5.0"]
-                 [cheshire "5.5.0"]
+                 [compojure "1.5.1"]
+                 [cheshire "5.6.3"]
                  [aleph "0.4.1"]
 
                  [ring/ring-mock "0.3.0"]
 
                  [potemkin "0.4.3"]
-                 [com.taoensso/timbre "4.3.1"]
+                 [com.taoensso/timbre "4.7.4"]
                  ])
