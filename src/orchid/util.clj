@@ -19,6 +19,3 @@
          (= (clojure.string/lower-case (modified-headers "content-type"))
             "application/json"))))
 
-
-
-

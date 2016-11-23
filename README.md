@@ -57,8 +57,10 @@ I included some sample requests using httpie: http://httpie.org
 
 ### JSON Response
 
+Any collection returned by a handler will get coerced to JSON.
+
 ```clojure
-(GET "/json" [] (json-response {:message "hello world!"}))
+(GET "/json" [] {:message "hello world!"})
 ;; http get localhost:8080
 ```
 

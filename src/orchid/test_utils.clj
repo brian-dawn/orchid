@@ -3,7 +3,6 @@
             [orchid.core :as core]
             [cheshire.core :as json]))
 
-
 (defn ok?
   "Returns whether or not a response has a 200 response code."
   [response]
@@ -38,7 +37,6 @@
   (if (json? response)
     (update-in response [:body] json/parse-string)
     response))
-
 
 (defn mock-request
   "Perform a mock request with an optional body. The body can be a string or a hashmap (indicating JSON request)."

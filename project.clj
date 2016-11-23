@@ -5,7 +5,8 @@
                                            ;; lein uberjar will complain but that's OK.
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :plugins [[lein-ancient "0.6.10"]]
+  :plugins [[lein-ancient "0.6.10"]
+            [lein-cljfmt "0.5.6"]]
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [ring "1.5.0"]
                  [ring-server "0.4.0"]
@@ -15,6 +16,8 @@
                  [compojure "1.5.1"]
                  [cheshire "5.6.3"]
                  [aleph "0.4.1"]
+
+                 [mvxcvi/puget "1.0.1"]
 
                  [ring/ring-mock "0.3.0"]
 

@@ -7,9 +7,9 @@
 
   (GET "/" [] "hello world!")
   (GET "/exception" [] (throw (new Exception "TestException")))
-  (GET "/queryparams" [param] (json-response param))
-  (GET "/urlparams/:param" [param] (json-response param))
-  (POST "/postbody" {body :body} (json-response body)))
+  (GET "/queryparams" [param] param)
+  (GET "/urlparams/:param" [param] param)
+  (POST "/postbody" {body :body} body))
 
 
 (defn -main [& args]
