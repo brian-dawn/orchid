@@ -1,4 +1,4 @@
-(defproject orchid "0.1.0-SNAPSHOT"
+(defproject orchid "0.2.0-SNAPSHOT"
   :description "A Clojure library to provide sane REST defaults for a compojure project."
   :url "https://github.com/brian-dawn/orchid"
   :main orchid.sample-app-with-real-server ;; Part of tests so isn't included in the actual library.
