@@ -9,4 +9,3 @@
                        debug
                        error
                        color-str])
-

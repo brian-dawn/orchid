@@ -1,27 +1,22 @@
 (ns orchid.middleware
   (:require [taoensso.timbre :as timbre]
             [cheshire.core :as json]
-            [orchid.util :as util]))
+            [ring.util.json-response :refer [json-response]]
+            [orchid.util :as util])
+  (:import [java.lang.IllegalStateException]))
 
-(defn colorize-request-method
-  "Colorize a keyword corresponding to a request method and convert it to a non keyword."
-  [method]
-  (let [color (case method
-                :get :green
-                :put :yellow
-                :delete :red
-                :post :blue
-                :white)]
-    (timbre/color-str color (name method))))
+(def ^:dynamic *request-id* nil)
+(defn request-id-middleware
+  "Set a dynamic var to some unique ID so we can track a request."
+  [app]
+  (fn [request]
+    (with-bindings {#'*request-id*
+                    (->> (java.util.UUID/randomUUID)
+                         str
+                         (take 4)
+                         (apply str))}
 
-(defn colorize-status [status]
-  (let [color (cond
-                (<= 200 status 299) :purple
-                (<= 300 status 399) :blue
-                (<= 400 status 499) :yellow
-                (<= 500 status)     :red
-                :else               :white)]
-    (timbre/color-str color (str status))))
+      (app request))))
 
 (defn json-body-middleware [app]
   (fn [request]
@@ -31,26 +26,28 @@
       (app (update-in request [:body] #(json/parse-string (slurp %) true)))
       (app request))))
 
-(defn logging-request-middleware
-  "Middleware that logs each request made. This MUST be first in the middleware
-   list so we can rip off the namespace from the app."
-  [app]
+(defn json-response-middleware [app]
   (fn [request]
-    (timbre/info ">"
-                 (colorize-request-method (:request-method request))
-                 (:uri request)
-                 (str "params=" (:params request))
-                 (str (when (:body request) (str "body=" (:body request)))))
-    (app request)))
 
-(defn logging-response-middleware
-  "Middleware that logs each response made."
-  [app]
-  (fn [request]
     (let [response (app request)]
-      (timbre/info "<"
-                   (colorize-status (:status response)))
-      response)))
+      (cond
+
+        (-> response :body coll?)
+        (-> response
+            (assoc :headers {"Content-Type" "application/json"})
+            (assoc :body (-> response :body json/encode)))
+
+        (-> response :body string?)
+        (-> response
+            (assoc :headers {"Content-Type" "text/html"}))
+
+        :default
+        response))))
+
+(defn exception->status [e] ;; TODO protocol or multimethod?
+
+  (cond (instance? IllegalStateException e) 403
+        :else 500))
 
 (defn exception-middleware
   [app config]
@@ -60,7 +57,7 @@
       (catch Exception e
         (timbre/error e "exception bubbled up too far")
         (if (:dev config)
-          {:status 500
+          {:status (exception->status e)
            :body (str (type e) " " (.getMessage e))}
-          {:status 500
+          {:status (exception->status e)
            :body "Oops! Something went terribly wrong!"})))))
