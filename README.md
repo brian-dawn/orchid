@@ -30,7 +30,7 @@ Then just add orchid as a dependency in your project.clj file. Place the followi
 
 (defroutes app
   (GET "/" [] "hello world!")
-  (not-found "not found")
+  (not-found "not found"))
 
 (defn -main []
   (grow app 8080))
