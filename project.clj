@@ -17,6 +17,8 @@
                  [cheshire "5.6.3"]
                  [aleph "0.4.1"]
 
+                 [com.cognitect/transit-clj "0.8.297"]
+
                  [mvxcvi/puget "1.0.1"]
 
                  [ring/ring-mock "0.3.0"]

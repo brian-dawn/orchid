@@ -1,9 +1,11 @@
 (ns orchid.middleware
   (:require [taoensso.timbre :as timbre]
             [cheshire.core :as json]
+            [cognitect.transit :as transit]
             [ring.util.json-response :refer [json-response]]
             [orchid.util :as util])
-  (:import [java.lang.IllegalStateException]))
+  (:import [java.lang.IllegalStateException]
+           [java.io ByteArrayOutputStream]))
 
 (def ^:dynamic *request-id* nil)
 (defn request-id-middleware
@@ -26,6 +28,30 @@
       (app (update-in request [:body] #(json/parse-string (slurp %) true)))
       (app request))))
 
+(defn transit-write [x]
+  (let [baos (ByteArrayOutputStream.)
+        w    (transit/writer baos :json)
+        _    (transit/write w x)
+        ret  (.toString baos)]
+    (.reset baos)
+    ret))
+
+(def transit-type (atom :json))
+
+(defn handle-col-response [response]
+  (case @transit-type
+    :json
+    (-> response
+        (assoc :headers {"Content-Type" "application/json"
+                         "Access-Control-Allow-Origin" "*"})
+        (assoc :body (-> response :body json/encode)))
+
+    :transit
+    (-> response
+        (assoc :headers {"Content-Type" "application/transit+json"
+                         "Access-Control-Allow-Origin" "*"})
+        (assoc :body (-> response :body transit-write)))))
+
 (defn json-response-middleware [app]
   (fn [request]
 
@@ -33,12 +59,11 @@
       (cond
 
         (-> response :body coll?)
-        (-> response
-            (assoc :headers {"Content-Type" "application/json"})
-            (assoc :body (-> response :body json/encode)))
+        (handle-col-response response)
 
         (-> response :body string?)
         (-> response
+            (assoc :headers {"Access-Control-Allow-Origin" "*"})
             (assoc :headers {"Content-Type" "text/html"}))
 
         :default
